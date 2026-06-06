@@ -1,0 +1,15 @@
+{
+  "name": "centry",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "test": "echo 'No tests in scaffold' && exit 0",
+    "lint": "eslint packages/**/src",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

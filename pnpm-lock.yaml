@@ -12,6 +12,24 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
+  packages/backend:
+    dependencies:
+      '@centry/shared':
+        specifier: workspace:*
+        version: link:../shared
+
+  packages/frontend:
+    dependencies:
+      '@centry/shared':
+        specifier: workspace:*
+        version: link:../shared
+
+  packages/sdk:
+    dependencies:
+      '@centry/shared':
+        specifier: workspace:*
+        version: link:../shared
+
   packages/shared: {}
 
 packages:

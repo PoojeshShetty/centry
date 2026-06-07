@@ -14,12 +14,17 @@
   },
   "dependencies": {
     "@centry/shared": "workspace:*",
+    "antd": "^6.4.3",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.17.0",
+    "styled-components": "^6.4.2",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/styled-components": "^5.1.36",
     "@vitejs/plugin-react": "^6.0.2",
     "cross-env": "^10.1.0",
     "typescript": "^6.0.3",

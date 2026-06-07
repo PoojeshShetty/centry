@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",
-    "test": "vitest run"
+    "test": "vitest run",
+    "migrate": "sequelize-cli db:migrate --options-path ../../.sequelizerc"
   },
   "dependencies": {
     "@centry/shared": "workspace:*",
@@ -22,6 +23,7 @@
     "@types/express": "^5.0.6",
     "@types/node": "^22.19.19",
     "@types/pg": "^8.20.0",
+    "sequelize-cli": "^6.6.5",
     "vitest": "^3.2.6"
   }
 }

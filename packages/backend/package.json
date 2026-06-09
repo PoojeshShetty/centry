@@ -14,13 +14,18 @@
   },
   "dependencies": {
     "@centry/shared": "workspace:*",
+    "bcryptjs": "^3.0.3",
     "express": "^4.22.2",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.21.0",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.8"
+    "sequelize": "^6.37.8",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.19.19",
     "@types/pg": "^8.20.0",
     "sequelize-cli": "^6.6.5",

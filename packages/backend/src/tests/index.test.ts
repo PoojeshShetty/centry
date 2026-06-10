@@ -8,9 +8,11 @@ function mockSequelize(authenticate: () => Promise<unknown>): void {
   }));
 }
 
-/** Mock the express default export to return the given app instance. */
+/** Mock the express default export to return the given app instance (with a stub `express.json`). */
 function mockExpress(app: unknown): void {
-  vi.doMock('express', () => ({ default: vi.fn(() => app) }));
+  const factory = vi.fn(() => app) as unknown as { json: () => unknown };
+  factory.json = vi.fn(() => 'json-mw');
+  vi.doMock('express', () => ({ default: factory }));
 }
 
 describe('src/index.ts', () => {
@@ -19,6 +21,9 @@ describe('src/index.ts', () => {
   beforeEach(() => {
     vi.resetModules();
     process.env = { ...ORIGINAL_ENV };
+    // Stub the routes barrel so index.ts wiring never pulls in the Sequelize
+    // model chain (these tests mock the sequelize singleton).
+    vi.doMock('../routes/index.js', () => ({ authRouter: express.Router() }));
   });
 
   afterEach(() => {
@@ -29,7 +34,7 @@ describe('src/index.ts', () => {
   it('listens on PORT from environment', async () => {
     process.env.PORT = '3001';
     const listen = vi.fn();
-    mockExpress({ listen });
+    mockExpress({ listen, use: vi.fn() });
     mockSequelize(() => Promise.resolve());
 
     await import('../index.js');
@@ -39,7 +44,7 @@ describe('src/index.ts', () => {
 
   it('calls process.exit(1) on DB failure', async () => {
     const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
-    mockExpress({ listen: vi.fn() });
+    mockExpress({ listen: vi.fn(), use: vi.fn() });
     mockSequelize(() => Promise.reject(new Error('connection refused')));
 
     await import('../index.js');
@@ -47,17 +52,23 @@ describe('src/index.ts', () => {
     await vi.waitFor(() => expect(exitSpy).toHaveBeenCalledWith(1));
   });
 
-  it('has no routes registered', async () => {
+  it('mounts the auth router under /api/auth with json parsing', async () => {
     // Never-resolving authenticate() keeps the .then() chain from firing, so
     // listen() is never called and we can inspect the app synchronously.
     mockSequelize(() => new Promise(() => {}));
-    vi.doMock('express', () => ({ default: () => express() }));
+    // Use the real express (default + static .json) so express.json() resolves.
+    vi.doMock('express', () => ({ default: express }));
 
     const { app } = (await import('../index.js')) as { app: Express };
 
-    // _router is an Express 4 internal, lazily created on the first route/
-    // middleware registration — undefined here proves nothing is wired.
+    // _router is an Express 4 internal, created on the first route/middleware
+    // registration — defined here proves express.json() + the router are wired.
     const internals = app as { _router?: Router };
-    expect(internals._router).toBeUndefined();
+    expect(internals._router).toBeDefined();
+
+    const mounted = internals._router!.stack.some(
+      (layer: { regexp?: RegExp }) => layer.regexp?.test('/api/auth'),
+    );
+    expect(mounted).toBe(true);
   });
 });

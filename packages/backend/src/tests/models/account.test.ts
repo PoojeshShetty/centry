@@ -35,6 +35,19 @@ describe('Account model', () => {
     expect(attrs.name.allowNull).toBe(false);
   });
 
+  it('email is a non-null unique string field', async () => {
+    const { Account } = await import('../../models/index.js');
+    const attrs = Account.getAttributes();
+    expect(attrs.email.allowNull).toBe(false);
+    expect(attrs.email.unique).toBe(true);
+  });
+
+  it('password_hash is a non-null string field', async () => {
+    const { Account } = await import('../../models/index.js');
+    const attrs = Account.getAttributes();
+    expect(attrs.password_hash.allowNull).toBe(false);
+  });
+
   it('has created_at but no updated_at', async () => {
     const { Account } = await import('../../models/index.js');
     const attrs = Account.getAttributes();

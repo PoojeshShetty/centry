@@ -1,1 +1,1 @@
-export {};
+export { authRouter } from './auth.js';

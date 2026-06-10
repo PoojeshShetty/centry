@@ -13,6 +13,8 @@ export class Account extends Model<
 > {
   declare id: CreationOptional<string>;
   declare name: string;
+  declare email: string;
+  declare password_hash: string;
   declare created_at: CreationOptional<Date>;
 }
 
@@ -24,6 +26,15 @@ Account.init(
       defaultValue: DataTypes.UUIDV4,
     },
     name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password_hash: {
       type: DataTypes.STRING,
       allowNull: false,
     },

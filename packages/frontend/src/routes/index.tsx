@@ -1,16 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
-import HomePage from '../pages/home'
-import NotFoundPage from '../pages/not-found'
+import { appRoutes } from './routes'
 
 /**
- * Root router definition (React Router data-router API).
- *
- * Scaffold stub: `/` → HomePage, everything else → NotFoundPage. M3 feature
- * routes (logs explorer) are added here.
+ * Root router definition (React Router data-router API). Routes are defined once
+ * in `./routes` so the app and the test render helper stay in sync.
  */
-const router = createBrowserRouter([
-  { path: '/', element: <HomePage /> },
-  { path: '*', element: <NotFoundPage /> },
-])
+const router = createBrowserRouter(appRoutes)
 
 export default router

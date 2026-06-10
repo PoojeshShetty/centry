@@ -1,0 +1,9 @@
+const path = require('path');
+
+// Paths are resolved against this file's location (repo root) so the config works
+// regardless of the cwd sequelize-cli is invoked from (e.g. pnpm --filter sets cwd
+// to packages/backend). See packages/backend/package.json "migrate" script.
+module.exports = {
+  config: path.resolve(__dirname, 'packages/backend/config/database.cjs'),
+  'migrations-path': path.resolve(__dirname, 'packages/backend/migrations'),
+};

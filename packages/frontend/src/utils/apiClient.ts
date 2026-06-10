@@ -1,5 +1,12 @@
 import { useAuthStore } from '../store/useAuthStore'
 
+/**
+ * Base URL of the backend API. The frontend and backend run on separate origins,
+ * so requests are prefixed with `VITE_API_URL` (set per Vite mode, e.g. `.env.dev`).
+ * Falls back to '' (same-origin relative paths) when unset — e.g. under Jest.
+ */
+const API_BASE_URL = import.meta.env?.VITE_API_URL ?? ''
+
 /** Error thrown for any non-2xx response; carries the backend message + HTTP status. */
 export class ApiRequestError extends Error {
   readonly status: number
@@ -23,7 +30,7 @@ async function request<T = unknown>(path: string, opts: RequestInit = {}): Promi
   if (!headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
   if (token) headers.set('Authorization', `Bearer ${token}`)
 
-  const res = await fetch(path, { ...opts, headers })
+  const res = await fetch(`${API_BASE_URL}${path}`, { ...opts, headers })
 
   const data = (await res.json().catch(() => null)) as unknown
 

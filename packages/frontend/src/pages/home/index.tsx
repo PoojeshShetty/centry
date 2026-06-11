@@ -20,6 +20,9 @@ export default function HomePage() {
       <h1>Centry</h1>
       <h2>{`Hello ${user?.name ?? ''}`}</h2>
       <p>
+        <Link to={paths.projects}>Projects</Link>
+      </p>
+      <p>
         <Link to={paths.account}>Account</Link>
       </p>
     </Wrapper>

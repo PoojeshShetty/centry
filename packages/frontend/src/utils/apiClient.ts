@@ -1,4 +1,10 @@
 import { useAuthStore } from '../store/useAuthStore'
+import type {
+  Project,
+  ProjectWithDsn,
+  CreateProjectInput,
+  UpdateProjectPatch,
+} from '../store/useProjectStore'
 
 /**
  * Base URL of the backend API. The frontend and backend run on separate origins,
@@ -46,3 +52,22 @@ async function request<T = unknown>(path: string, opts: RequestInit = {}): Promi
 }
 
 export const apiClient = { request }
+
+export const projectApi = {
+  list: (): Promise<ProjectWithDsn[]> => request<ProjectWithDsn[]>('/api/projects'),
+
+  create: (input: CreateProjectInput): Promise<ProjectWithDsn> =>
+    request<ProjectWithDsn>('/api/projects', { method: 'POST', body: JSON.stringify(input) }),
+
+  update: (id: string, patch: UpdateProjectPatch): Promise<ProjectWithDsn> =>
+    request<ProjectWithDsn>(`/api/projects/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(patch),
+    }),
+
+  archive: (id: string): Promise<void> =>
+    request<void>(`/api/projects/${id}`, { method: 'DELETE' }),
+
+  rotateKey: (id: string): Promise<{ dsn: string }> =>
+    request<{ dsn: string }>(`/api/projects/${id}/rotate-key`, { method: 'POST' }),
+}

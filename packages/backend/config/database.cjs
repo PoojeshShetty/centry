@@ -2,6 +2,8 @@
 // Prefers a single DB_URL connection string; falls back to individual DB_* vars.
 // Exported per-environment because sequelize-cli selects config[NODE_ENV || 'development'].
 
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') });
+
 function buildConfig() {
   if (process.env.DB_URL) {
     return {

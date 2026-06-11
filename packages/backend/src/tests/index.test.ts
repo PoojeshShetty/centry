@@ -23,7 +23,7 @@ describe('src/index.ts', () => {
     process.env = { ...ORIGINAL_ENV };
     // Stub the routes barrel so index.ts wiring never pulls in the Sequelize
     // model chain (these tests mock the sequelize singleton).
-    vi.doMock('../routes/index.js', () => ({ authRouter: express.Router() }));
+    vi.doMock('../routes/index.js', () => ({ authRouter: express.Router(), projectRouter: express.Router() }));
   });
 
   afterEach(() => {

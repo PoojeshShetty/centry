@@ -1,9 +1,9 @@
 import { styled } from 'styled-components'
 import { Button } from 'antd'
-import type { Project, ProjectWithDsn } from '../../store/useProjectStore'
+import type { ProjectWithDsn } from '../../store/useProjectStore'
 
 export interface ProjectCardProps {
-  project: Project
+  project: ProjectWithDsn
   onSelect: (p: ProjectWithDsn) => void
   onArchive: (id: string) => void
 }
@@ -16,6 +16,12 @@ const Card = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   background: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
 `
 
 const ProjectName = styled.h3`
@@ -51,15 +57,22 @@ const Actions = styled.div`
   margin-top: 0.5rem;
 `
 
-export default function ProjectCard({ project, onArchive }: ProjectCardProps) {
+export default function ProjectCard({ project, onSelect, onArchive }: ProjectCardProps) {
   return (
-    <Card>
+    <Card onClick={() => onSelect(project)}>
       <ProjectName>{project.name}</ProjectName>
       <ProjectUrl>{project.application_url}</ProjectUrl>
       <EnvironmentBadge>{project.environment}</EnvironmentBadge>
       <CreatedAt>{new Date(project.created_at).toLocaleDateString()}</CreatedAt>
       <Actions>
-        <Button danger size="small" onClick={() => onArchive(project.id)}>
+        <Button
+          danger
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation()
+            onArchive(project.id)
+          }}
+        >
           Archive
         </Button>
       </Actions>

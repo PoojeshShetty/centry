@@ -21,6 +21,7 @@ const mockProjects = [
     description: null,
     environment: 'production',
     created_at: '2026-01-01T00:00:00.000Z',
+    dsn: 'https://aaa111@localhost:3000/p1',
   },
   {
     id: 'p2',
@@ -29,6 +30,7 @@ const mockProjects = [
     description: null,
     environment: 'staging',
     created_at: '2026-02-01T00:00:00.000Z',
+    dsn: 'https://bbb222@localhost:3000/p2',
   },
   {
     id: 'p3',
@@ -37,6 +39,7 @@ const mockProjects = [
     description: null,
     environment: 'development',
     created_at: '2026-03-01T00:00:00.000Z',
+    dsn: 'https://ccc333@localhost:3000/p3',
   },
 ]
 

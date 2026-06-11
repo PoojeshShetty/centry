@@ -29,7 +29,7 @@ export interface UpdateProjectPatch {
 }
 
 export interface ProjectState {
-  projects: Project[]
+  projects: ProjectWithDsn[]
   selectedProject: ProjectWithDsn | null
   isLoading: boolean
   error: string | null

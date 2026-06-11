@@ -4,6 +4,7 @@ import { Button, Modal } from 'antd'
 import { useProjectStore } from '../../store/useProjectStore'
 import ProjectCard from './ProjectCard'
 import CreateProjectModal from './CreateProjectModal'
+import ProjectDetailPanel from './ProjectDetailPanel'
 
 const PageWrapper = styled.div`
   padding: 2rem;
@@ -29,7 +30,8 @@ const EmptyState = styled.div`
 `
 
 export default function ProjectsPage() {
-  const { projects, fetchProjects, archiveProject } = useProjectStore()
+  const { projects, fetchProjects, archiveProject, selectedProject, selectProject } =
+    useProjectStore()
   const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
@@ -65,13 +67,14 @@ export default function ProjectsPage() {
             <ProjectCard
               key={p.id}
               project={p}
-              onSelect={() => {}}
+              onSelect={selectProject}
               onArchive={handleArchive}
             />
           ))}
         </Grid>
       )}
       <CreateProjectModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <ProjectDetailPanel project={selectedProject} onClose={() => selectProject(null)} />
     </PageWrapper>
   )
 }

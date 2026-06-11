@@ -54,7 +54,7 @@ async function request<T = unknown>(path: string, opts: RequestInit = {}): Promi
 export const apiClient = { request }
 
 export const projectApi = {
-  list: (): Promise<Project[]> => request<Project[]>('/api/projects'),
+  list: (): Promise<ProjectWithDsn[]> => request<ProjectWithDsn[]>('/api/projects'),
 
   create: (input: CreateProjectInput): Promise<ProjectWithDsn> =>
     request<ProjectWithDsn>('/api/projects', { method: 'POST', body: JSON.stringify(input) }),

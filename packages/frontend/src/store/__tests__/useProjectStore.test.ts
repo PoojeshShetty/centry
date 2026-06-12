@@ -16,13 +16,14 @@ jest.unstable_mockModule('../../utils/apiClient', () => ({
 
 const { useProjectStore } = await import('../useProjectStore')
 
-const mockProject: Project = {
+const mockProject: ProjectWithDsn = {
   id: 'proj-1',
   name: 'Test Project',
   application_url: 'https://example.com',
   description: null,
   environment: 'production',
   created_at: '2026-01-01T00:00:00.000Z',
+  dsn: ""
 }
 
 const mockProjectWithDsn: ProjectWithDsn = {

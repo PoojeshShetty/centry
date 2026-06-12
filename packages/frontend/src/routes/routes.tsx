@@ -4,6 +4,7 @@ import LoginPage from '../pages/login'
 import RegisterPage from '../pages/register'
 import AccountPage from '../pages/account'
 import ProjectsPage from '../pages/projects'
+import LogsPage from '../pages/logs'
 import NotFoundPage from '../pages/not-found'
 import ProtectedRoute from '../components/ProtectedRoute'
 
@@ -19,6 +20,7 @@ export const paths = {
   register: '/register',
   account: '/account',
   projects: '/projects',
+  projectLogs: '/projects/:projectId/logs',
 } as const
 
 /** Route table consumed by both the browser router and the test render helper. */
@@ -44,6 +46,14 @@ export const appRoutes: RouteConfig[] = [
     element: (
       <ProtectedRoute>
         <ProjectsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: paths.projectLogs,
+    element: (
+      <ProtectedRoute>
+        <LogsPage />
       </ProtectedRoute>
     ),
   },

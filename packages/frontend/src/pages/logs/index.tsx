@@ -1,8 +1,11 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { useLogStore } from '../../store/useLogStore'
+import type { LogItem } from '@centry/shared'
 import FilterBar from './FilterBar'
+import LogStream from './LogStream'
+import LogDetailDrawer from './LogDetailDrawer'
 
 const Page = styled.div`
   display: flex;
@@ -25,9 +28,10 @@ const ErrorText = styled.p`
 export default function LogsPage() {
   const { projectId } = useParams<{ projectId: string }>()
   const [searchParams] = useSearchParams()
-  const { fetchLogs, setFilter, filters, logs, loading, error } = useLogStore()
+  const { fetchLogs, fetchNextPage, setFilter, filters, logs, hasMore, loading, error } =
+    useLogStore()
+  const [selectedLog, setSelectedLog] = useState<LogItem | null>(null)
 
-  // Restore filter state from URL params on mount (FR-17)
   useEffect(() => {
     const level = searchParams.get('level')
     const search = searchParams.get('search')
@@ -41,7 +45,6 @@ export default function LogsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Fetch logs when projectId or filters change (FR-12)
   useEffect(() => {
     if (projectId) fetchLogs(projectId)
   }, [projectId, filters, fetchLogs])
@@ -60,6 +63,15 @@ export default function LogsPage() {
           <p>No logs found</p>
         </CenteredMessage>
       )}
+      {!error && logs.length > 0 && (
+        <LogStream
+          logs={logs}
+          hasMore={hasMore}
+          onLoadMore={() => projectId && fetchNextPage(projectId)}
+          onRowClick={setSelectedLog}
+        />
+      )}
+      <LogDetailDrawer log={selectedLog} onClose={() => setSelectedLog(null)} />
     </Page>
   )
 }

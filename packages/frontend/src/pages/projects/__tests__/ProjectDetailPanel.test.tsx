@@ -1,5 +1,6 @@
 import { jest } from '@jest/globals'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { message } from 'antd'
 import { useProjectStore } from '../../../store/useProjectStore'
 import ProjectDetailPanel from '../ProjectDetailPanel'
@@ -12,6 +13,14 @@ const mockProject = {
   environment: 'production',
   created_at: '2026-01-01T00:00:00.000Z',
   dsn: 'https://abc123def456@localhost:3000/p1',
+}
+
+function renderPanel(project = mockProject, onClose = jest.fn()) {
+  return render(
+    <MemoryRouter>
+      <ProjectDetailPanel project={project} onClose={onClose} />
+    </MemoryRouter>,
+  )
 }
 
 describe('ProjectDetailPanel', () => {
@@ -32,30 +41,34 @@ describe('ProjectDetailPanel', () => {
   })
 
   it('renders nothing visible when project is null (FR-09)', () => {
-    render(<ProjectDetailPanel project={null} onClose={jest.fn()} />)
+    render(
+      <MemoryRouter>
+        <ProjectDetailPanel project={null} onClose={jest.fn()} />
+      </MemoryRouter>,
+    )
     expect(screen.queryByText('Project Alpha')).not.toBeInTheDocument()
   })
 
   it('renders drawer with project name when project is provided (FR-09)', async () => {
-    render(<ProjectDetailPanel project={mockProject} onClose={jest.fn()} />)
+    renderPanel()
     await waitFor(() => expect(screen.getByText('Project Alpha')).toBeInTheDocument())
   })
 
   it('DSN is masked on initial render (FR-09)', async () => {
-    render(<ProjectDetailPanel project={mockProject} onClose={jest.fn()} />)
+    renderPanel()
     await waitFor(() => expect(screen.getByText(/••••••••/)).toBeInTheDocument())
     expect(screen.queryByText(mockProject.dsn)).not.toBeInTheDocument()
   })
 
   it('clicking Reveal shows full DSN (FR-09)', async () => {
-    render(<ProjectDetailPanel project={mockProject} onClose={jest.fn()} />)
+    renderPanel()
     await waitFor(() => screen.getByRole('button', { name: /reveal/i }))
     fireEvent.click(screen.getByRole('button', { name: /reveal/i }))
     expect(screen.getByText(mockProject.dsn)).toBeInTheDocument()
   })
 
   it('copy button calls clipboard.writeText with full DSN (FR-09)', async () => {
-    render(<ProjectDetailPanel project={mockProject} onClose={jest.fn()} />)
+    renderPanel()
     await waitFor(() => screen.getByRole('button', { name: /copy/i }))
     fireEvent.click(screen.getByRole('button', { name: /copy/i }))
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockProject.dsn)
@@ -64,7 +77,7 @@ describe('ProjectDetailPanel', () => {
   it('rotate key button calls useProjectStore.rotateKey (FR-09)', async () => {
     const rotateMock = jest.fn().mockResolvedValue(undefined) as any
     useProjectStore.setState({ rotateKey: rotateMock })
-    render(<ProjectDetailPanel project={mockProject} onClose={jest.fn()} />)
+    renderPanel()
     await waitFor(() => screen.getByRole('button', { name: /rotate key/i }))
     fireEvent.click(screen.getByRole('button', { name: /rotate key/i }))
     await waitFor(() => expect(rotateMock).toHaveBeenCalledWith('p1'))
@@ -72,9 +85,15 @@ describe('ProjectDetailPanel', () => {
 
   it('onClose is called when drawer is closed (FR-09)', async () => {
     const onClose = jest.fn()
-    render(<ProjectDetailPanel project={mockProject} onClose={onClose} />)
+    renderPanel(mockProject, onClose)
     await waitFor(() => screen.getByRole('button', { name: /close/i }))
     fireEvent.click(screen.getByRole('button', { name: /close/i }))
     expect(onClose).toHaveBeenCalled()
+  })
+
+  it('View Logs button is present and navigates to project logs (FR-12)', async () => {
+    renderPanel()
+    await waitFor(() => screen.getByRole('button', { name: /view logs/i }))
+    expect(screen.getByRole('button', { name: /view logs/i })).toBeInTheDocument()
   })
 })

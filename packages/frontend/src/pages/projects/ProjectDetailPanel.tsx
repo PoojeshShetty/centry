@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { Button, Drawer, Space, Typography, message } from 'antd'
 import { useProjectStore, type ProjectWithDsn } from '../../store/useProjectStore'
@@ -38,6 +39,7 @@ function maskDsn(dsn: string): string {
 export default function ProjectDetailPanel({ project, onClose }: ProjectDetailPanelProps) {
   const [revealed, setRevealed] = useState(false)
   const rotateKey = useProjectStore((s) => s.rotateKey)
+  const navigate = useNavigate()
 
   const dsn = project?.dsn ?? ''
   const displayDsn = revealed ? dsn : maskDsn(dsn)
@@ -71,9 +73,12 @@ export default function ProjectDetailPanel({ project, onClose }: ProjectDetailPa
               </Button>
             </Space>
           </DsnContainer>
-          <Button danger onClick={handleRotate}>
-            Rotate key
-          </Button>
+          <Space>
+            <Button onClick={() => navigate(`/projects/${project.id}/logs`)}>View Logs</Button>
+            <Button danger onClick={handleRotate}>
+              Rotate key
+            </Button>
+          </Space>
         </>
       )}
     </Drawer>

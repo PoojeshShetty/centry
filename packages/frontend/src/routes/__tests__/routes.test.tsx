@@ -11,4 +11,9 @@ describe('routes', () => {
     expect(paths).toContain('/account')
     expect(paths).toContain('*')
   })
+
+  it('declares /projects/:projectId/logs for the logs explorer (FR-12)', () => {
+    const paths = router.routes.map((r) => r.path)
+    expect(paths).toContain('/projects/:projectId/logs')
+  })
 })

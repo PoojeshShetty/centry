@@ -11,7 +11,8 @@
     "dev": "tsx watch --env-file=../../.env src/index.ts",
     "start": "node --env-file=../../.env dist/index.js",
     "test": "vitest run",
-    "migrate": "sequelize-cli db:migrate --options-path ../../.sequelizerc"
+    "migrate": "sequelize-cli db:migrate --options-path ../../.sequelizerc",
+    "seed:logs": "tsx --env-file=../../.env src/seeders/seed-logs.ts"
   },
   "dependencies": {
     "@centry/shared": "workspace:*",

@@ -129,7 +129,7 @@ importers:
         version: 5.1.36
       '@vitejs/plugin-react':
         specifier: ^6.0.2
-        version: 6.0.2(vite@8.0.16(@types/node@22.19.19)(esbuild@0.27.7)(tsx@4.22.4))
+        version: 6.0.2(vite@8.0.16(@types/node@22.19.19)(esbuild@0.28.0)(tsx@4.22.4))
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
@@ -144,13 +144,13 @@ importers:
         version: 0.0.11(jest-environment-jsdom@30.4.1)
       ts-jest:
         specifier: ^29.4.11
-        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7))(esbuild@0.27.7)(jest-util@30.4.1)(jest@30.4.2(@types/node@22.19.19))(typescript@6.0.3)
+        version: 29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7))(esbuild@0.28.0)(jest-util@30.4.1)(jest@30.4.2(@types/node@22.19.19))(typescript@6.0.3)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
       vite:
         specifier: ^8.0.16
-        version: 8.0.16(@types/node@22.19.19)(esbuild@0.27.7)(tsx@4.22.4)
+        version: 8.0.16(@types/node@22.19.19)(esbuild@0.28.0)(tsx@4.22.4)
 
   packages/sdk:
     dependencies:
@@ -158,7 +158,11 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
-  packages/shared: {}
+  packages/shared:
+    devDependencies:
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/debug@4.1.13)(@types/node@22.19.19)(jsdom@26.1.0)(lightningcss@1.32.0)(tsx@4.22.4)
 
 packages:
 
@@ -5611,10 +5615,10 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.12.2':
     optional: true
 
-  '@vitejs/plugin-react@6.0.2(vite@8.0.16(@types/node@22.19.19)(esbuild@0.27.7)(tsx@4.22.4))':
+  '@vitejs/plugin-react@6.0.2(vite@8.0.16(@types/node@22.19.19)(esbuild@0.28.0)(tsx@4.22.4))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.0.16(@types/node@22.19.19)(esbuild@0.27.7)(tsx@4.22.4)
+      vite: 8.0.16(@types/node@22.19.19)(esbuild@0.28.0)(tsx@4.22.4)
 
   '@vitest/expect@3.2.6':
     dependencies:
@@ -7719,7 +7723,7 @@ snapshots:
     dependencies:
       typescript: 6.0.3
 
-  ts-jest@29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7))(esbuild@0.27.7)(jest-util@30.4.1)(jest@30.4.2(@types/node@22.19.19))(typescript@6.0.3):
+  ts-jest@29.4.11(@babel/core@7.29.7)(@jest/transform@30.4.1)(@jest/types@30.4.1)(babel-jest@30.4.1(@babel/core@7.29.7))(esbuild@0.28.0)(jest-util@30.4.1)(jest@30.4.2(@types/node@22.19.19))(typescript@6.0.3):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -7737,7 +7741,7 @@ snapshots:
       '@jest/transform': 30.4.1
       '@jest/types': 30.4.1
       babel-jest: 30.4.1(@babel/core@7.29.7)
-      esbuild: 0.27.7
+      esbuild: 0.28.0
       jest-util: 30.4.1
 
   tslib@2.8.1:
@@ -7878,7 +7882,7 @@ snapshots:
       lightningcss: 1.32.0
       tsx: 4.22.4
 
-  vite@8.0.16(@types/node@22.19.19)(esbuild@0.27.7)(tsx@4.22.4):
+  vite@8.0.16(@types/node@22.19.19)(esbuild@0.28.0)(tsx@4.22.4):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -7887,7 +7891,7 @@ snapshots:
       tinyglobby: 0.2.17
     optionalDependencies:
       '@types/node': 22.19.19
-      esbuild: 0.27.7
+      esbuild: 0.28.0
       fsevents: 2.3.3
       tsx: 4.22.4
 

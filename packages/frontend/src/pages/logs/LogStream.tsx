@@ -5,8 +5,10 @@ import type { LogItem } from '@centry/shared'
 import LogRow from './LogRow'
 
 const Container = styled.div`
-  overflow: auto;
-  flex: 1;
+  margin-top: 3rem;
+  height: calc(100vh - 3rem);
+  overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 interface LogStreamProps {
@@ -35,7 +37,7 @@ export default function LogStream({ logs, hasMore, onLoadMore, onRowClick }: Log
 
   return (
     <Container ref={containerRef} onScroll={handleScroll}>
-      <div style={{ height: rowVirtualizer.getTotalSize(), position: 'relative' }}>
+      <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
         {rowVirtualizer.getVirtualItems().map((virtualRow) => (
           <div
             key={virtualRow.key}

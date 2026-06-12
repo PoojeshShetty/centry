@@ -19,8 +19,13 @@ const Bar = styled.div`
   align-items: center;
   padding: 0.75rem 1rem;
   background: #fafafa;
+  z-index: 1000;
   border-bottom: 1px solid #f0f0f0;
   flex-wrap: wrap;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 `
 
 const PillGroup = styled.div`

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { build } from './envelope.js';
+import { build } from '../envelope.js';
 import { parseEnvelope } from '@centry/shared';
 import type { LogItem } from '@centry/shared';
 

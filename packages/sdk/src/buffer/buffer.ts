@@ -1,5 +1,5 @@
 import type { LogItem } from '@centry/shared';
-import { send } from './transport.js';
+import { send } from '../transport/transport.js';
 
 const FLUSH_SIZE = 100;
 const HARD_CAP = 1000;

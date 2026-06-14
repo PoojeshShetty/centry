@@ -1,8 +1,8 @@
 import type { LogItem } from '@centry/shared';
-import { getConfig } from './init.js';
+import { getConfig } from '../core/init.js';
 import { build } from './envelope.js';
 import { envelopeUrl } from './urls.js';
-import { SDK_NAME, SDK_VERSION } from './constants.js';
+import { SDK_NAME, SDK_VERSION } from '../utils/constants.js';
 
 export async function send(logs: LogItem[]): Promise<void> {
   let config;

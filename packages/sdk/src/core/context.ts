@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from 'async_hooks';
 import { randomBytes } from 'crypto';
 import type { Request, Response, NextFunction } from 'express';
-import type { TraceContext } from './types.js';
+import type { TraceContext } from '../types.js';
 
 export const traceStore = new AsyncLocalStorage<TraceContext>();
 

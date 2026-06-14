@@ -1,4 +1,4 @@
-import type { StackFrame } from './types.js';
+import type { StackFrame } from '../types.js';
 import { SDK_NAME } from './constants.js';
 
 // Matches: "    at FnName (/path/to/file.ts:10:5)"

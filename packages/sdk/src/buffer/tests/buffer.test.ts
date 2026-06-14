@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-vi.mock('./transport.js', () => ({
+vi.mock('../../transport/transport.js', () => ({
   send: vi.fn().mockResolvedValue(undefined),
 }));
 
-import { push, flush, getDropped, resetForTest, setBufferForTest } from './buffer.js';
-import { send } from './transport.js';
+import { push, flush, getDropped, resetForTest, setBufferForTest } from '../buffer.js';
+import { send } from '../../transport/transport.js';
 import type { LogItem } from '@centry/shared';
 
 const mockSend = vi.mocked(send);

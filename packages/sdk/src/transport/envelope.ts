@@ -1,5 +1,5 @@
 import type { LogItem, EnvelopeHeader } from '@centry/shared';
-import { SDK_NAME, SDK_VERSION } from './constants.js';
+import { SDK_NAME, SDK_VERSION } from '../utils/constants.js';
 
 export function build(logs: LogItem[]): string {
   const header: EnvelopeHeader = {

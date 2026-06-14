@@ -1,18 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('./init.js', () => ({
+vi.mock('../init.js', () => ({
   getConfig: vi.fn(),
 }));
 
-vi.mock('./buffer.js', () => ({
+vi.mock('../../buffer/buffer.js', () => ({
   push: vi.fn(),
 }));
 
-vi.mock('./stackTrace.js', () => ({
+vi.mock('../../utils/stackTrace.js', () => ({
   parseStack: vi.fn(),
 }));
 
-vi.mock('./context.js', () => ({
+vi.mock('../context.js', () => ({
   traceStore: {
     getStore: vi.fn(),
   },
@@ -22,12 +22,12 @@ vi.mock('os', () => ({
   hostname: vi.fn().mockReturnValue('test-host'),
 }));
 
-import { captureLog } from './captureLog.js';
-import { getConfig } from './init.js';
-import { push } from './buffer.js';
-import { parseStack } from './stackTrace.js';
-import { traceStore } from './context.js';
-import type { StackFrame } from './types.js';
+import { captureLog } from '../captureLog.js';
+import { getConfig } from '../init.js';
+import { push } from '../../buffer/buffer.js';
+import { parseStack } from '../../utils/stackTrace.js';
+import { traceStore } from '../context.js';
+import type { StackFrame } from '../../types.js';
 
 const mockGetConfig = vi.mocked(getConfig);
 const mockPush = vi.mocked(push);

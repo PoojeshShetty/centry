@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('./captureLog.js', () => ({
+vi.mock('../captureLog.js', () => ({
   captureLog: vi.fn(),
 }));
 
-import { logger } from './logger.js';
-import { captureLog } from './captureLog.js';
+import { logger } from '../logger.js';
+import { captureLog } from '../captureLog.js';
 
 const mockCaptureLog = vi.mocked(captureLog);
 

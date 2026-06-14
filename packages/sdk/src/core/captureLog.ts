@@ -1,10 +1,10 @@
 import { hostname } from 'os';
 import type { LogItem } from '@centry/shared';
 import { getConfig } from './init.js';
-import { parseStack } from './stackTrace.js';
+import { parseStack } from '../utils/stackTrace.js';
 import { traceStore } from './context.js';
-import { push } from './buffer.js';
-import { SDK_NAME, SDK_VERSION } from './constants.js';
+import { push } from '../buffer/buffer.js';
+import { SDK_NAME, SDK_VERSION } from '../utils/constants.js';
 
 export function captureLog(
   level: string,

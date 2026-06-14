@@ -1,6 +1,6 @@
-import type { ResolvedConfig, SdkConfig } from './types.js';
-import { parseDsn } from './utils/parseDsn.js';
-import { SDK_NAME } from './constants.js';
+import type { ResolvedConfig, SdkConfig } from '../types.js';
+import { parseDsn } from '../utils/parseDsn.js';
+import { SDK_NAME } from '../utils/constants.js';
 
 let config: ResolvedConfig | null = null;
 

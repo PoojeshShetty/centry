@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('./init.js', () => ({
+vi.mock('../../core/init.js', () => ({
   getConfig: vi.fn(),
 }));
 
-vi.mock('./envelope.js', () => ({
+vi.mock('../envelope.js', () => ({
   build: vi.fn(),
 }));
 
-import { send } from './transport.js';
-import { getConfig } from './init.js';
-import { build } from './envelope.js';
+import { send } from '../transport.js';
+import { getConfig } from '../../core/init.js';
+import { build } from '../envelope.js';
 import type { LogItem } from '@centry/shared';
 
 const mockGetConfig = vi.mocked(getConfig);

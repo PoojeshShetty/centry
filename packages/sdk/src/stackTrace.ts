@@ -1,4 +1,5 @@
 import type { StackFrame } from './types.js';
+import { SDK_NAME } from './constants.js';
 
 // Matches: "    at FnName (/path/to/file.ts:10:5)"
 const FRAME_WITH_FN = /^\s+at\s+(.+?)\s+\((.+?)(?::(\d+))?(?::(\d+))?\)$/;
@@ -14,7 +15,7 @@ export function parseStack(stack: string): StackFrame[] {
     const withFn = FRAME_WITH_FN.exec(line);
     if (withFn) {
       const [, fn, filename, lineno, colno] = withFn;
-      if (filename.includes('@centry/sdk')) continue;
+      if (filename.includes(SDK_NAME)) continue;
       const frame: StackFrame = { filename, function: fn };
       if (lineno !== undefined) frame.lineno = Number(lineno);
       if (colno !== undefined) frame.colno = Number(colno);
@@ -25,7 +26,7 @@ export function parseStack(stack: string): StackFrame[] {
     const withoutFn = FRAME_WITHOUT_FN.exec(line);
     if (withoutFn) {
       const [, filename, lineno, colno] = withoutFn;
-      if (filename.includes('@centry/sdk')) continue;
+      if (filename.includes(SDK_NAME)) continue;
       // Skip node internals that have no real path
       if (filename.startsWith('node:')) continue;
       const frame: StackFrame = { filename, function: '<anonymous>' };

@@ -8,9 +8,13 @@
   },
   "scripts": {
     "build": "tsc --build",
-    "dev": "tsc --build --watch"
+    "dev": "tsc --build --watch",
+    "test": "vitest run"
   },
   "dependencies": {
     "@centry/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.6"
   }
 }

@@ -19,7 +19,7 @@ export function captureLog(
     if (config.enableLogs === false) return;
 
     let i = 0;
-    const body = params && params.length > 0 ? template.replace(/%s/g, () => String(params[i++] ?? '')) : template;
+    const body = params && params.length > 0 ? template.replace(/\{[^}]*\}/g, () => String(params[i++] ?? '')) : template;
 
     const sdkAttrs: Record<string, unknown> = {
       'sentry.sdk.name': SDK_NAME,

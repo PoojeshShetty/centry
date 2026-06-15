@@ -61,8 +61,8 @@ describe('captureLog', () => {
   });
 
   describe('template interpolation', () => {
-    it('replaces %s placeholders with params sequentially', () => {
-      captureLog('info', 9, 'User %s logged in from %s', ['john', 'NYC']);
+    it('replaces {key} placeholders with params sequentially', () => {
+      captureLog('info', 9, 'User {name} logged in from {city}', ['john', 'NYC']);
       const logItem = mockPush.mock.calls[0][0];
       expect(logItem.body).toBe('User john logged in from NYC');
     });
@@ -131,7 +131,7 @@ describe('captureLog', () => {
     });
 
     it('includes sentry.message.parameter.N for each param', () => {
-      captureLog('info', 9, 'Hello %s and %s', ['Alice', 'Bob']);
+      captureLog('info', 9, 'Hello {a} and {b}', ['Alice', 'Bob']);
       const logItem = mockPush.mock.calls[0][0];
       expect(logItem.attributes?.['sentry.message.parameter.0']).toBe('Alice');
       expect(logItem.attributes?.['sentry.message.parameter.1']).toBe('Bob');

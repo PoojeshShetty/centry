@@ -42,7 +42,7 @@ describe('transport.send', () => {
   it('POSTs to correct URL with correct headers', async () => {
     await send([makeLog()]);
 
-    expect(fetch).toHaveBeenCalledWith('https://localhost:3000/api/proj123/envelope/', {
+    expect(fetch).toHaveBeenCalledWith('http://localhost:3000/api/projects/proj123/envelope/', {
       method: 'POST',
       body: 'mocked-envelope-string',
       headers: {

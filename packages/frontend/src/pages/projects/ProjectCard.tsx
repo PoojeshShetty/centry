@@ -1,6 +1,7 @@
 import { styled } from 'styled-components'
 import { Button } from 'antd'
 import type { ProjectWithDsn } from '../../store/useProjectStore'
+import { theme } from '../../theme'
 
 export interface ProjectCardProps {
   project: ProjectWithDsn
@@ -9,13 +10,13 @@ export interface ProjectCardProps {
 }
 
 const Card = styled.div`
-  border: 1px solid #e8e8e8;
+  border: 1px solid ${theme.border.default};
   border-radius: 8px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background: #fff;
+  background: ${theme.bg.surface};
   cursor: pointer;
   transition: box-shadow 0.15s ease;
 
@@ -31,7 +32,7 @@ const ProjectName = styled.h3`
 
 const ProjectUrl = styled.p`
   margin: 0;
-  color: #595959;
+  color: ${theme.text.muted};
   font-size: 0.875rem;
   word-break: break-all;
 `
@@ -41,14 +42,14 @@ const EnvironmentBadge = styled.span`
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 0.75rem;
-  background-color: #f0f0f0;
-  color: #595959;
+  background-color: ${theme.bg.elevated};
+  color: ${theme.text.muted};
   align-self: flex-start;
 `
 
 const CreatedAt = styled.time`
   font-size: 0.75rem;
-  color: #8c8c8c;
+  color: ${theme.text.secondary};
 `
 
 const Actions = styled.div`

@@ -5,6 +5,7 @@ import { useProjectStore } from '../../store/useProjectStore'
 import ProjectCard from './ProjectCard'
 import CreateProjectDrawer from './CreateProjectDrawer'
 import ProjectDetailPanel from './ProjectDetailPanel'
+import { theme } from '../../theme'
 
 const PageWrapper = styled.div`
   padding: 2rem;
@@ -26,7 +27,7 @@ const Grid = styled.div`
 const EmptyState = styled.div`
   text-align: center;
   padding: 4rem 2rem;
-  color: #8c8c8c;
+  color: ${theme.text.secondary};
 `
 
 export default function ProjectsPage() {

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button, Drawer, Space, Typography, Descriptions } from 'antd'
 import { styled } from 'styled-components'
 import type { LogItem } from '@centry/shared'
+import { theme } from '../../theme'
 
 const Section = styled.div`
   margin-bottom: 1.5rem;
@@ -10,14 +11,14 @@ const Section = styled.div`
 const SectionLabel = styled.p`
   margin: 0 0 0.5rem 0;
   font-size: 0.75rem;
-  color: #8c8c8c;
+  color: ${theme.text.secondary};
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
 `
 
 const BodyText = styled.pre`
-  background: #f5f5f5;
+  background: ${theme.bg.elevated};
   border-radius: 6px;
   padding: 0.75rem;
   margin: 0;
@@ -28,8 +29,8 @@ const BodyText = styled.pre`
 `
 
 const RawJson = styled.pre`
-  background: #1a1a1a;
-  color: #e8e8e8;
+  background: ${theme.bg.app};
+  color: ${theme.text.primary};
   border-radius: 6px;
   padding: 0.75rem;
   margin: 0;

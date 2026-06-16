@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals'
 import { render, screen, fireEvent } from '@testing-library/react'
 import type { LogItem } from '@centry/shared'
+import { theme } from '../../../theme'
 
 const { default: LogRow } = await import('../LogRow')
 
@@ -41,14 +42,9 @@ describe('LogRow (FR-15)', () => {
   })
 
   describe('level badge colours', () => {
-    const levelCases: Array<{ level: string; expectedColor: string }> = [
-      { level: 'trace', expectedColor: '#8c8c8c' },
-      { level: 'debug', expectedColor: '#722ed1' },
-      { level: 'info', expectedColor: '#1677ff' },
-      { level: 'warn', expectedColor: '#d48806' },
-      { level: 'error', expectedColor: '#ff4d4f' },
-      { level: 'fatal', expectedColor: '#a8071a' },
-    ]
+    const levelCases = (Object.keys(theme.severity) as Array<keyof typeof theme.severity>).map(
+      (level) => ({ level, expectedColor: theme.severity[level].text }),
+    )
 
     for (const { level, expectedColor } of levelCases) {
       it(`${level} badge has correct text color`, () => {

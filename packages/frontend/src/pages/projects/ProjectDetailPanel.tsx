@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { Button, Drawer, Space, Typography, message } from 'antd'
 import { useProjectStore, type ProjectWithDsn } from '../../store/useProjectStore'
+import { theme } from '../../theme'
 
 interface ProjectDetailPanelProps {
   project: ProjectWithDsn | null
@@ -10,7 +11,7 @@ interface ProjectDetailPanelProps {
 }
 
 const DsnContainer = styled.div`
-  background: #f5f5f5;
+  background: ${theme.bg.elevated};
   border-radius: 6px;
   padding: 0.75rem;
   margin-bottom: 1.5rem;
@@ -19,7 +20,7 @@ const DsnContainer = styled.div`
 const DsnLabel = styled.p`
   margin: 0 0 0.5rem 0;
   font-size: 0.75rem;
-  color: #8c8c8c;
+  color: ${theme.text.secondary};
   text-transform: uppercase;
   letter-spacing: 0.05em;
 `

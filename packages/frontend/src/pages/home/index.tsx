@@ -46,7 +46,7 @@ const CtaRow = styled.div`
 const PrimaryLink = styled(Link)`
   padding: 0.75rem 2rem;
   background: ${theme.accent.primary};
-  color: #fff;
+  color: white;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
@@ -54,7 +54,7 @@ const PrimaryLink = styled(Link)`
 
   &:hover {
     background: ${theme.accent.primaryHover};
-    color: #fff;
+    color: white;
   }
 `
 

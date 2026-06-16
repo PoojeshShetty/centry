@@ -6,6 +6,7 @@ import type { LogItem } from '@centry/shared'
 import FilterBar from './FilterBar'
 import LogStream from './LogStream'
 import LogDetailDrawer from './LogDetailDrawer'
+import { theme } from '../../theme'
 
 const Page = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const CenteredMessage = styled.div`
 `
 
 const ErrorText = styled.p`
-  color: #ff4d4f;
+  color: ${theme.status.danger};
 `
 
 export default function LogsPage() {

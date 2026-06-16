@@ -1,6 +1,7 @@
 import type { ResolvedConfig, SdkReactConfig } from '../types.js';
 import { parseDsn } from '../utils/parseDsn.js';
 import { SDK_NAME } from '../utils/constants.js';
+import { installIntegrations } from '../integrations/index.js';
 
 let config: ResolvedConfig | null = null;
 
@@ -19,6 +20,10 @@ export function init(options: SdkReactConfig): void {
   }
 
   config = { ...options, ...parsed };
+
+  if (typeof window !== 'undefined') {
+    installIntegrations();
+  }
 }
 
 export function getConfig(): ResolvedConfig | null {

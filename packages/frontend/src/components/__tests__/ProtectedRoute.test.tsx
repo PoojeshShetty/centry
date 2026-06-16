@@ -2,9 +2,9 @@ import { screen } from '@testing-library/react'
 import { useAuthStore } from '../../store/useAuthStore'
 import { renderPage } from '../../utils/testUtils'
 import ProtectedRoute from '../ProtectedRoute'
-import type { RouteConfig } from '../../routes/routes'
+import type { RouteObject } from 'react-router-dom'
 
-const routes: RouteConfig[] = [
+const routes: RouteObject[] = [
   {
     path: '/',
     element: (

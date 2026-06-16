@@ -96,6 +96,14 @@ describe('ProjectsPage', () => {
     confirmSpy.mockRestore()
   })
 
+  it('opens drawer with form fields when "Create project" is clicked (FR-05)', async () => {
+    renderPage([paths.projects])
+    fireEvent.click(screen.getAllByRole('button', { name: /create project/i })[0])
+    await waitFor(() => expect(screen.getByLabelText(/name/i)).toBeInTheDocument())
+    expect(screen.getByLabelText(/application url/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/environment/i)).toBeInTheDocument()
+  })
+
   it('does not call archiveProject when cancelled (FR-10)', async () => {
     const archiveMock = jest.fn() as any
     useProjectStore.setState({

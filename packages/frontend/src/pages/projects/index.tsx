@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import { Button, Modal } from 'antd'
 import { useProjectStore } from '../../store/useProjectStore'
 import ProjectCard from './ProjectCard'
-import CreateProjectModal from './CreateProjectModal'
+import CreateProjectDrawer from './CreateProjectDrawer'
 import ProjectDetailPanel from './ProjectDetailPanel'
 
 const PageWrapper = styled.div`
@@ -32,7 +32,7 @@ const EmptyState = styled.div`
 export default function ProjectsPage() {
   const { projects, fetchProjects, archiveProject, selectedProject, selectProject } =
     useProjectStore()
-  const [modalOpen, setModalOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   useEffect(() => {
     fetchProjects()
@@ -50,14 +50,14 @@ export default function ProjectsPage() {
     <PageWrapper>
       <Header>
         <h1>Projects</h1>
-        <Button type="primary" onClick={() => setModalOpen(true)}>
+        <Button type="primary" onClick={() => setDrawerOpen(true)}>
           Create project
         </Button>
       </Header>
       {projects.length === 0 ? (
         <EmptyState>
           <p>No projects yet.</p>
-          <Button type="primary" onClick={() => setModalOpen(true)}>
+          <Button type="primary" onClick={() => setDrawerOpen(true)}>
             Create project
           </Button>
         </EmptyState>
@@ -73,7 +73,11 @@ export default function ProjectsPage() {
           ))}
         </Grid>
       )}
-      <CreateProjectModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <CreateProjectDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onSuccess={() => { setDrawerOpen(false); fetchProjects() }}
+      />
       <ProjectDetailPanel project={selectedProject} onClose={() => selectProject(null)} />
     </PageWrapper>
   )

@@ -1,8 +1,9 @@
 import type { LogItem } from '@centry/shared';
-import { getConfig } from './init.js';
+import { getConfig, getTraceId } from './init.js';
 import { parseStack } from '../utils/stackTrace.js';
 import { push } from '../buffer/buffer.js';
 import { SDK_NAME, SDK_VERSION } from '../utils/constants.js';
+import { randomHex } from '../utils/random.js';
 
 export function captureLog(
   level: string,
@@ -45,11 +46,14 @@ export function captureLog(
 
     const mergedAttrs: Record<string, unknown> = { ...sdkAttrs, ...attributes };
 
+    const sessionTraceId = getTraceId();
     const logItem: LogItem = {
       timestamp: Date.now(),
       level,
       severity_number: severityNumber,
       body,
+      ...(sessionTraceId !== null && { trace_id: sessionTraceId }),
+      span_id: randomHex(8),
       attributes: mergedAttrs,
     };
 

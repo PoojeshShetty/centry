@@ -1,9 +1,15 @@
 import type { ResolvedConfig, SdkReactConfig } from '../types.js';
 import { parseDsn } from '../utils/parseDsn.js';
 import { SDK_NAME } from '../utils/constants.js';
+import { randomHex } from '../utils/random.js';
 import { installIntegrations } from '../integrations/index.js';
 
 let config: ResolvedConfig | null = null;
+let traceId: string | null = null;
+
+export function getTraceId(): string | null {
+  return traceId;
+}
 
 export function init(options: SdkReactConfig): void {
   if (config !== null) {
@@ -20,6 +26,7 @@ export function init(options: SdkReactConfig): void {
   }
 
   config = { ...options, ...parsed };
+  traceId = randomHex(16);
 
   if (typeof window !== 'undefined') {
     installIntegrations();
@@ -32,4 +39,5 @@ export function getConfig(): ResolvedConfig | null {
 
 export function resetForTest(): void {
   config = null;
+  traceId = null;
 }

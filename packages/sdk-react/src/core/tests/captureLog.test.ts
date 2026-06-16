@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('../init.js', () => ({
   getConfig: vi.fn(),
+  getTraceId: vi.fn().mockReturnValue('aabbccddeeff00112233445566778899'),
 }));
 
 vi.mock('../../buffer/buffer.js', () => ({
@@ -13,13 +14,14 @@ vi.mock('../../utils/stackTrace.js', () => ({
 }));
 
 import { captureLog } from '../captureLog.js';
-import { getConfig } from '../init.js';
+import { getConfig, getTraceId } from '../init.js';
 import { push } from '../../buffer/buffer.js';
 import { parseStack } from '../../utils/stackTrace.js';
 import type { StackFrame } from '../../types.js';
 import type { LogItem } from '@centry/shared';
 
 const mockGetConfig = vi.mocked(getConfig);
+const mockGetTraceId = vi.mocked(getTraceId);
 const mockPush = vi.mocked(push);
 const mockParseStack = vi.mocked(parseStack);
 
@@ -83,6 +85,27 @@ describe('captureLog', () => {
       const item = mockPush.mock.calls[0][0];
       expect(item.timestamp).toBeGreaterThanOrEqual(before);
       expect(item.timestamp).toBeLessThanOrEqual(after);
+    });
+
+    it('sets trace_id from session', () => {
+      captureLog('info', 9, 'msg');
+      expect(mockPush.mock.calls[0][0].trace_id).toBe('aabbccddeeff00112233445566778899');
+    });
+
+    it('omits trace_id when session has none (before init)', () => {
+      mockGetTraceId.mockReturnValueOnce(null);
+      captureLog('info', 9, 'msg');
+      expect(mockPush.mock.calls[0][0].trace_id).toBeUndefined();
+    });
+
+    it('sets a unique span_id (16 hex chars) per call', () => {
+      captureLog('info', 9, 'msg');
+      captureLog('info', 9, 'msg');
+      const id1 = mockPush.mock.calls[0][0].span_id;
+      const id2 = mockPush.mock.calls[1][0].span_id;
+      expect(id1).toMatch(/^[0-9a-f]{16}$/);
+      expect(id2).toMatch(/^[0-9a-f]{16}$/);
+      expect(id1).not.toBe(id2);
     });
   });
 

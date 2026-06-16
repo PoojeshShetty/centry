@@ -90,6 +90,9 @@ importers:
 
   packages/frontend:
     dependencies:
+      '@centry/sdk-react':
+        specifier: workspace:*
+        version: link:../sdk-react
       '@centry/shared':
         specifier: workspace:*
         version: link:../shared

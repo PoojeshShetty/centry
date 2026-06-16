@@ -4,6 +4,10 @@ import { SDK_NAME } from './constants.js';
 const FRAME_WITH_FN = /^\s+at\s+(.+?)\s+\((.+?)(?::(\d+))?(?::(\d+))?\)$/;
 const FRAME_WITHOUT_FN = /^\s+at\s+((?!.*\().+?)(?::(\d+))?(?::(\d+))?$/;
 
+function isSdkFrame(filename: string): boolean {
+  return filename.includes(SDK_NAME) || filename.includes('sdk-react/src/');
+}
+
 export function parseStack(stack: string): StackFrame[] {
   if (!stack) return [];
 
@@ -13,7 +17,7 @@ export function parseStack(stack: string): StackFrame[] {
     const withFn = FRAME_WITH_FN.exec(line);
     if (withFn) {
       const [, fn, filename, lineno, colno] = withFn;
-      if (filename.includes(SDK_NAME)) continue;
+      if (isSdkFrame(filename)) continue;
       const frame: StackFrame = { filename, function: fn };
       if (lineno !== undefined) frame.lineno = Number(lineno);
       if (colno !== undefined) frame.colno = Number(colno);
@@ -24,7 +28,7 @@ export function parseStack(stack: string): StackFrame[] {
     const withoutFn = FRAME_WITHOUT_FN.exec(line);
     if (withoutFn) {
       const [, filename, lineno, colno] = withoutFn;
-      if (filename.includes(SDK_NAME)) continue;
+      if (isSdkFrame(filename)) continue;
       if (filename.startsWith('node:')) continue;
       const frame: StackFrame = { filename, function: '<anonymous>' };
       if (lineno !== undefined) frame.lineno = Number(lineno);

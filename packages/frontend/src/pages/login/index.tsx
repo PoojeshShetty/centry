@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Alert, Button, Form, Input } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
+import { styled } from 'styled-components'
 import { logger } from '@centry/sdk-react'
 import { apiClient } from '../../utils/apiClient'
 import { useAuthStore, type AuthUser } from '../../store/useAuthStore'
 import { paths } from '../../routes/routes'
+import { theme } from '../../theme'
 
 interface AuthResponse {
   token: string
@@ -16,10 +18,44 @@ interface LoginValues {
   password: string
 }
 
-/**
- * Login page (FR-10/FR-11). On a 200 it persists the JWT and navigates home;
- * a 401 shows the generic "invalid email or password" message inline.
- */
+const PageWrapper = styled.div`
+  min-height: 100vh;
+  background: ${theme.bg.app};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+`
+
+const Card = styled.div`
+  background: ${theme.bg.surface};
+  border: 1px solid ${theme.border.subtle};
+  border-radius: 8px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+`
+
+const Title = styled.h1`
+  color: ${theme.text.primary};
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+`
+
+const FooterText = styled.p`
+  color: ${theme.text.secondary};
+  margin-top: 0.5rem;
+  text-align: center;
+
+  a {
+    color: ${theme.accent.primary};
+    &:hover {
+      color: ${theme.accent.primaryHover};
+    }
+  }
+`
+
 export default function LoginPage() {
   const navigate = useNavigate()
   const setAuth = useAuthStore((s) => s.setAuth)
@@ -46,31 +82,35 @@ export default function LoginPage() {
   }
 
   return (
-    <Form layout="vertical" onFinish={onFinish} style={{ maxWidth: 360, margin: '2rem auto' }}>
-      <h1>Log in</h1>
-      {error && <Alert type="error" title={error} style={{ marginBottom: 16 }} />}
-      <Form.Item
-        label="Email"
-        name="email"
-        rules={[{ required: true, type: 'email', message: 'a valid email is required' }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: 'password is required' }]}
-      >
-        <Input.Password />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" loading={submitting} block>
-          Log in
-        </Button>
-      </Form.Item>
-      <p>
-        Need an account? <Link to="/register">Register</Link>
-      </p>
-    </Form>
+    <PageWrapper>
+      <Card>
+        <Title>Log in</Title>
+        <Form layout="vertical" onFinish={onFinish}>
+          {error && <Alert type="error" title={error} style={{ marginBottom: 16 }} />}
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, type: 'email', message: 'a valid email is required' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: 'password is required' }]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={submitting} block>
+              Log in
+            </Button>
+          </Form.Item>
+        </Form>
+        <FooterText>
+          Need an account? <Link to="/register">Register</Link>
+        </FooterText>
+      </Card>
+    </PageWrapper>
   )
 }

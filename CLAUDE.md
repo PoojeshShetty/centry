@@ -5,10 +5,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 **centry** is a minimal Sentry-style logging platform built from scratch as a pnpm-workspaces
-TypeScript monorepo. It has three runtime parts plus a shared contract package:
+TypeScript monorepo. It has four runtime parts plus a shared contract package:
 
 - **`packages/sdk`** (`@centry/sdk`) — a Node SDK that backends install to buffer and ship logs
   over the Sentry envelope wire format.
+- **`packages/sdk-react`** (`@centry/sdk-react`) — a browser/React SDK with auto-instrumentation
+  integrations (global errors, fetch, XHR, navigation), an `ErrorBoundary` component, and a
+  `useLogger` hook. Initialized via `init({ dsn })` in `main.tsx`; `VITE_CENTRY_DSN` controls
+  activation. Uses **Vitest** (not Jest) for tests.
 - **`packages/backend`** (`@centry/backend`) — Express service that ingests envelopes, authenticates,
   stores logs in Postgres, and serves them to the UI.
 - **`packages/frontend`** (`@centry/frontend`) — React (Vite) logs-explorer UI.
@@ -17,8 +21,8 @@ TypeScript monorepo. It has three runtime parts plus a shared contract package:
   here so SDK/backend/frontend never drift.**
 
 `plan.md` is the authoritative spec for the wire format, data model, endpoints, auth schemes, and
-build order (Backend → SDK → Frontend). Read it before doing feature work. Current state: monorepo
-and frontend are scaffolded; backend has a Sequelize/account foundation; SDK and shared are stubs.
+build order (Backend → SDK → Frontend). Read it before doing feature work. Current state: all
+packages are implemented; the frontend uses `@centry/sdk-react` for browser-side log shipping.
 
 > Note: `plan.md` describes raw `pg`+`ioredis`. The backend actually uses **Sequelize** (`pg` +
 > `pg-hstore`) and Redis is not wired up yet. Trust the code for stack details, `plan.md` for intent.
@@ -50,6 +54,14 @@ pnpm --filter @centry/backend test
 pnpm --filter @centry/backend test -- account.test.ts         # single file
 pnpm --filter @centry/backend test -- -t "name of test"       # single test by name
 
+# SDK (Node) — Vitest
+pnpm --filter @centry/sdk test
+pnpm --filter @centry/sdk test -- buffer.test.ts              # single file
+
+# SDK React — Vitest
+pnpm --filter @centry/sdk-react test
+pnpm --filter @centry/sdk-react test -- useLogger.test.ts     # single file
+
 # Frontend dev server / build
 pnpm --filter @centry/frontend dev
 pnpm --filter @centry/frontend build
@@ -67,7 +79,7 @@ hand-edit a hardcoded version into `package.json`.
     eg: - This component is created using the fr-...
         - --------- Utils ---------------
   The comments should be for section of code which might have some complexity or some solution that was not straight forward to implement
-- Follow DRY in tests too: extract repeated render/setup boilerplate (e.g. a `renderPage(initialEntries, routes)` MemoryRouter helper) into a shared file and reuse it across test files instead of redefining per file
+- Follow DRY for code and in tests too: extract repeated render/setup boilerplate (e.g. a `renderPage(initialEntries, routes)` MemoryRouter helper) into a shared file and reuse it across test files instead of redefining per file
 - Do not define types inside code files. Keep types in a dedicated `types.ts` file per package (e.g. `packages/sdk/src/types.ts`). Mixing type definitions into logic files makes the code harder to read and navigate.
 
 
@@ -76,9 +88,17 @@ hand-edit a hardcoded version into `package.json`.
 **Three auth schemes, one per actor** (see `plan.md` §2.2 for the middleware contracts):
 - **Ingest** (SDK→backend): `X-Sentry-Auth` header carries the public key → `project_keys`. The DSN
   encodes the project.
-- **Read** (frontend→backend): per-project read token via `Authorization: Bearer <read_token>` →
-  `projects.read_token`.
+- **Read** (frontend→backend): JWT via `Authorization: Bearer <token>` + project ownership check.
+  There is no `read_token` column on `projects` — ownership is verified against the JWT subject.
 - **Management** (provisioning): a single `ADMIN_TOKEN` env secret gates the `/api/internal/*` routes.
+
+**sdk-react architecture:** `init()` in `src/core/init.ts` parses the DSN, generates a session
+`traceId` (random 16-char hex), and calls `installIntegrations()` which patches `window.onerror`,
+`window.addEventListener('unhandledrejection')`, `fetch`, `XMLHttpRequest`, and the History API.
+All logs funnel through `captureLog` → `Buffer` → `Transport` (same envelope wire format as the
+Node SDK). `useLogger(componentName)` returns a memoized logger that auto-tags `'component.name'`.
+The `ErrorBoundary` component wraps subtrees and logs render errors. `resetForTest()` is exported
+from `init.ts` and individual integration modules for test isolation.
 
 **Ingest route quirk:** the envelope body is newline-delimited, NOT a single JSON object. Read it as
 raw text (`express.text({ type: 'application/x-sentry-envelope' })`) and run it through
@@ -93,14 +113,16 @@ silently; buffer ≤1000 items; ≤100 logs/envelope; flush at 100 items or 5s a
 
 - Every package is `"type": "module"` and uses TS **project references**. `tsconfig.base.json` sets
   `moduleResolution: "bundler"`, `composite: true`, `strict: true`. Root `tsconfig.json` references
-  all four packages; `pnpm build` is `tsc --build`.
+  all five packages; `pnpm build` is `tsc --build`.
 - Packages export source directly (`"exports": { ".": "./src/index.ts" }`) and depend on each other
   via `"@centry/shared": "workspace:*"`.
+- `@centry/sdk-react` lists `react >=18` as a peer dependency and uses **Vitest** (with `jsdom`
+  environment) — not Jest. Tests use `@testing-library/react`.
 - Prettier: single quotes, semicolons, trailing commas (`all`), width 100.
 
 ## Coding gotchas
 
-These are non-obvious and have already cost time (see `notes.md`):
+These are non-obvious and have already cost time:
 
 - **styled-components must use the named import:** `import { styled } from 'styled-components'`, NOT
   the default `import styled from 'styled-components'`. styled-components has no `exports` map, so

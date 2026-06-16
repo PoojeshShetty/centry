@@ -1,8 +1,14 @@
 import { jest } from '@jest/globals'
-import { useAuthStore } from '../useAuthStore'
+import { useAuthStore, isTokenExpired } from '../useAuthStore'
 
 const TOKEN_KEY = 'centry.auth.token'
 const USER_KEY = 'centry.auth.user'
+
+function makeJwt(exp: number): string {
+  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
+  const payload = btoa(JSON.stringify({ sub: '1', exp }))
+  return `${header}.${payload}.sig`
+}
 
 const user = {
   id: '1',
@@ -52,5 +58,33 @@ describe('useAuthStore', () => {
     expect(state.token).toBe('persisted-tok')
     expect(state.user).toEqual(user)
     expect(state.isAuthenticated).toBe(true)
+  })
+
+  it('clears an expired token from localStorage on load', async () => {
+    const expiredToken = makeJwt(Math.floor(Date.now() / 1000) - 60)
+    localStorage.setItem(TOKEN_KEY, expiredToken)
+    localStorage.setItem(USER_KEY, JSON.stringify(user))
+
+    jest.resetModules()
+    const mod = await import('../useAuthStore')
+
+    const state = mod.useAuthStore.getState()
+    expect(state.token).toBeNull()
+    expect(state.isAuthenticated).toBe(false)
+    expect(localStorage.getItem(TOKEN_KEY)).toBeNull()
+  })
+})
+
+describe('isTokenExpired', () => {
+  it('returns true for a token with an exp in the past', () => {
+    expect(isTokenExpired(makeJwt(Math.floor(Date.now() / 1000) - 1))).toBe(true)
+  })
+
+  it('returns false for a token with an exp in the future', () => {
+    expect(isTokenExpired(makeJwt(Math.floor(Date.now() / 1000) + 3600))).toBe(false)
+  })
+
+  it('returns false for a malformed token', () => {
+    expect(isTokenExpired('not.a.jwt')).toBe(false)
   })
 })

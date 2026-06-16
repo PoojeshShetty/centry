@@ -62,6 +62,35 @@ describe('apiClient.request', () => {
     ).rejects.toBeInstanceOf(ApiRequestError)
   })
 
+  it('on 401 with active token, logs out the user', async () => {
+    useAuthStore.getState().setAuth('tok-abc', user)
+    ;(global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 401,
+      statusText: 'Unauthorized',
+      json: async () => ({ error: 'token expired' }),
+    })
+
+    await expect(apiClient.request('/api/projects')).rejects.toBeInstanceOf(ApiRequestError)
+    expect(useAuthStore.getState().isAuthenticated).toBe(false)
+    expect(useAuthStore.getState().token).toBeNull()
+  })
+
+  it('on 401 without token, does not clear auth state', async () => {
+    ;(global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 401,
+      statusText: 'Unauthorized',
+      json: async () => ({ error: 'invalid email or password' }),
+    })
+
+    await expect(apiClient.request('/api/auth/login', { method: 'POST' })).rejects.toBeInstanceOf(
+      ApiRequestError,
+    )
+    expect(useAuthStore.getState().isAuthenticated).toBe(false)
+    expect(useAuthStore.getState().token).toBeNull()
+  })
+
   it('returns parsed JSON data on success', async () => {
     ;(global.fetch as jest.Mock).mockResolvedValue({
       ok: true,

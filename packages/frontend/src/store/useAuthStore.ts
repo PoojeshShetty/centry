@@ -1,3 +1,4 @@
+import { logger } from '@centry/sdk-react'
 import { create } from 'zustand'
 
 /** Public account shape returned by the auth endpoints (never includes the hash). */
@@ -19,9 +20,25 @@ export interface AuthState {
 const TOKEN_KEY = 'centry.auth.token'
 const USER_KEY = 'centry.auth.user'
 
+export function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1])) as Record<string, unknown>
+    return typeof payload.exp === 'number' && payload.exp * 1000 < Date.now()
+  } catch {
+    return false
+  }
+}
+
 function loadToken(): string | null {
   try {
-    return localStorage.getItem(TOKEN_KEY)
+    const token = localStorage.getItem(TOKEN_KEY)
+    if (token && isTokenExpired(token)) {
+      logger.info("Token expired. Logging user out")
+      localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(USER_KEY)
+      return null
+    }
+    return token
   } catch {
     return null
   }

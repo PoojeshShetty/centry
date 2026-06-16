@@ -1,9 +1,8 @@
 import { RouterProvider } from 'react-router-dom'
 import router from './routes'
+import { useTokenExpiryCheck } from './hooks/useTokenExpiryCheck'
 
-/**
- * Top-level application component. Wires the router into the React tree.
- */
 export default function App() {
+  useTokenExpiryCheck()
   return <RouterProvider router={router} />
 }

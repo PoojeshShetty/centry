@@ -1,6 +1,6 @@
 import { useAuthStore } from '../store/useAuthStore'
+import { navigateTo } from './navigate'
 import type {
-  Project,
   ProjectWithDsn,
   CreateProjectInput,
   UpdateProjectPatch,
@@ -41,6 +41,10 @@ async function request<T = unknown>(path: string, opts: RequestInit = {}): Promi
   const data = (await res.json().catch(() => null)) as unknown
 
   if (!res.ok) {
+    if (res.status === 401 && token) {
+      useAuthStore.getState().logout()
+      navigateTo('/login')
+    }
     const message =
       (data && typeof data === 'object' && 'error' in data && typeof data.error === 'string'
         ? data.error

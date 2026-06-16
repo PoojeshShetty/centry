@@ -3,4 +3,6 @@
 interface ImportMetaEnv {
   /** Base URL of the centry backend API (e.g. http://localhost:3000). */
   readonly VITE_API_URL?: string
+  /** DSN for the centry SDK. */
+  readonly VITE_CENTRY_DSN?: string
 }

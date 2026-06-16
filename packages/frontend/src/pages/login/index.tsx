@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Alert, Button, Form, Input } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
+import { logger } from '@centry/sdk-react'
 import { apiClient } from '../../utils/apiClient'
 import { useAuthStore, type AuthUser } from '../../store/useAuthStore'
 import { paths } from '../../routes/routes'
@@ -36,7 +37,9 @@ export default function LoginPage() {
       setAuth(data.token, data.user)
       navigate(paths.home)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'login failed')
+      const message = err instanceof Error ? err.message : 'login failed'
+      setError(message)
+      logger.error('Login failed: {0}', [message], { 'user.email': values.email })
     } finally {
       setSubmitting(false)
     }

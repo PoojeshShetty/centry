@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Alert, Button, Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { logger } from '@centry/sdk-react'
 import { apiClient } from '../../utils/apiClient'
 import { useAuthStore, type AuthUser } from '../../store/useAuthStore'
 import { paths } from '../../routes/routes'
@@ -24,7 +25,9 @@ export default function AccountPage() {
         if (active) setAccount(data)
       })
       .catch((err) => {
-        if (active) setError(err instanceof Error ? err.message : 'failed to load account')
+        const message = err instanceof Error ? err.message : 'failed to load account'
+        if (active) setError(message)
+        logger.error('Failed to load account: {0}', [message])
       })
     return () => {
       active = false

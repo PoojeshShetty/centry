@@ -37,7 +37,8 @@ export function installXhr(): void {
       }
     });
 
-    return originalOpen.call(this, method, url, ...rest);
+    const [async = true, ...userPass] = rest;
+    return originalOpen.call(this, method, url, async, ...userPass);
   };
 }
 

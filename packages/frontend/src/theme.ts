@@ -31,6 +31,14 @@ export const theme = {
     danger: '#ff4d4f',
     warning: '#faad14',
   },
+  auth: {
+    bg: '#ffffff',
+    bgAlt: '#f5f7fa',
+    accent: '#3730a3',
+    accentHover: '#4338ca',
+    text: '#111827',
+    textSecondary: '#6b7280',
+  },
 } as const;
 
 export type Theme = typeof theme;

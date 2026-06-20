@@ -28,12 +28,6 @@ describe('AuthLayout', () => {
     expect(screen.getByText('centry')).toBeInTheDocument()
   })
 
-  it('renders three skeleton cards in the right panel (FR-04)', () => {
-    const { container } = render(<AuthLayout {...defaultProps} />)
-    const skeletons = container.querySelectorAll('.ant-skeleton')
-    expect(skeletons.length).toBeGreaterThanOrEqual(3)
-  })
-
   // CSS media query hiding (@media max-width: 768px) is not computable in jsdom.
   // This test verifies the right-panel element exists in the DOM; visual hiding is CSS-only.
   it('includes the right panel wrapper in the DOM (FR-08, hidden by CSS at ≤768px)', () => {

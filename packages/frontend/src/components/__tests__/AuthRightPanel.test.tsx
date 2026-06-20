@@ -1,16 +1,19 @@
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { AuthRightPanel } from '../AuthRightPanel'
 
 describe('AuthRightPanel', () => {
-  it('renders exactly three skeleton cards', () => {
-    const { container } = render(<AuthRightPanel />)
-    const skeletons = container.querySelectorAll('.ant-skeleton')
-    expect(skeletons).toHaveLength(3)
+  it('renders the headline', () => {
+    render(<AuthRightPanel />)
+    expect(screen.getByText(/Log everything/)).toBeInTheDocument()
   })
 
-  it('all skeleton cards have the active prop (shimmer animation)', () => {
-    const { container } = render(<AuthRightPanel />)
-    const activeSkeletons = container.querySelectorAll('.ant-skeleton-active')
-    expect(activeSkeletons).toHaveLength(3)
+  it('renders log-level badges for each entry', () => {
+    render(<AuthRightPanel />)
+    expect(screen.getAllByText(/info|warn|error|debug|fatal|trace/i).length).toBeGreaterThanOrEqual(5)
+  })
+
+  it('renders log message text', () => {
+    render(<AuthRightPanel />)
+    expect(screen.getByText(/Server started on port/i)).toBeInTheDocument()
   })
 })

@@ -1,33 +1,53 @@
-import { Form, Input, Modal, Select } from 'antd'
+import { Button, Drawer, Form, Input, Select } from 'antd'
+import { styled } from 'styled-components'
+import { theme } from '../../theme'
 import { useProjectStore, type CreateProjectInput } from '../../store/useProjectStore'
 
-export interface CreateProjectModalProps {
+export interface CreateProjectDrawerProps {
   open: boolean
   onClose: () => void
+  onSuccess: () => void
 }
 
-export default function CreateProjectModal({ open, onClose }: CreateProjectModalProps) {
+const FooterActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid ${theme.border.subtle};
+`
+
+export default function CreateProjectDrawer({ open, onClose, onSuccess }: CreateProjectDrawerProps) {
   const [form] = Form.useForm<CreateProjectInput>()
   const createProject = useProjectStore((s) => s.createProject)
 
   async function handleSubmit(values: CreateProjectInput) {
     await createProject(values)
     form.resetFields()
-    onClose()
+    onSuccess()
   }
 
-  function handleCancel() {
+  function handleClose() {
     form.resetFields()
     onClose()
   }
 
   return (
-    <Modal
+    <Drawer
       title="Create project"
+      placement="right"
+      width={480}
       open={open}
-      onOk={() => form.submit()}
-      onCancel={handleCancel}
+      onClose={handleClose}
       destroyOnHidden
+      footer={
+        <FooterActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="primary" onClick={() => form.submit()}>
+            Create
+          </Button>
+        </FooterActions>
+      }
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item
@@ -59,6 +79,6 @@ export default function CreateProjectModal({ open, onClose }: CreateProjectModal
           <Input.TextArea rows={3} />
         </Form.Item>
       </Form>
-    </Modal>
+    </Drawer>
   )
 }

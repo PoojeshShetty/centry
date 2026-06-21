@@ -81,6 +81,7 @@ hand-edit a hardcoded version into `package.json`.
   The comments should be for section of code which might have some complexity or some solution that was not straight forward to implement
 - Follow DRY for code and in tests too: extract repeated render/setup boilerplate (e.g. a `renderPage(initialEntries, routes)` MemoryRouter helper) into a shared file and reuse it across test files instead of redefining per file
 - Do not define types inside code files. Keep types in a dedicated `types.ts` file per package (e.g. `packages/sdk/src/types.ts`). Mixing type definitions into logic files makes the code harder to read and navigate.
+- Avoid writing FR numbers to unit test case description
 
 
 ## Architecture notes

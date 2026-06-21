@@ -99,6 +99,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
     try {
       const { dsn } = await projectApi.rotateKey(id)
       set((state) => ({
+        projects: state.projects.map((p) => (p.id === id ? { ...p, dsn } : p)),
         selectedProject:
           state.selectedProject?.id === id
             ? { ...state.selectedProject, dsn }

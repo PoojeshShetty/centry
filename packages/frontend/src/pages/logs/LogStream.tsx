@@ -5,8 +5,7 @@ import type { LogItem } from '@centry/shared'
 import LogRow from './LogRow'
 
 const Container = styled.div`
-  margin-top: 3rem;
-  height: calc(100vh - 3rem);
+  height: calc(100vh - 25rem);
   overflow-y: scroll;
   overflow-x: hidden;
 `

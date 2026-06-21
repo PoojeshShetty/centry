@@ -17,25 +17,31 @@ describe('LoginPage', () => {
     global.fetch = jest.fn()
   })
 
-  it('on 200 persists the JWT via setAuth and navigates to / (FR-10)', async () => {
-    ;(global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => ({
-        token: 'jwt-456',
-        user: {
-          id: '1',
-          name: 'Alice',
-          email: 'alice@example.com',
-          created_at: '2026-01-01T00:00:00.000Z',
-        },
-      }),
-    })
+  it('on 200 persists the JWT via setAuth and navigates to /projects (FR-10)', async () => {
+    ;(global.fetch as jest.Mock)
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          token: 'jwt-456',
+          user: {
+            id: '1',
+            name: 'Alice',
+            email: 'alice@example.com',
+            created_at: '2026-01-01T00:00:00.000Z',
+          },
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => [],
+      })
 
     renderPage([paths.login])
     fillValidForm()
 
-    await waitFor(() => expect(screen.getByText('Centry')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Projects' })).toBeInTheDocument())
     expect(useAuthStore.getState().token).toBe('jwt-456')
     expect(localStorage.getItem('centry.auth.token')).toBe('jwt-456')
 

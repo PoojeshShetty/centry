@@ -1,5 +1,6 @@
 import { styled } from 'styled-components'
 import type { LogItem } from '@centry/shared'
+import { theme } from '../../theme'
 
 interface LevelStyle {
   bg: string
@@ -7,19 +8,8 @@ interface LevelStyle {
   border: string
 }
 
-const LEVEL_COLORS: Record<string, LevelStyle> = {
-  trace: { bg: '#f5f5f5', text: '#8c8c8c', border: '#d9d9d9' },
-  debug: { bg: '#f9f0ff', text: '#722ed1', border: '#d3adf7' },
-  info: { bg: '#e6f4ff', text: '#1677ff', border: '#91caff' },
-  warn: { bg: '#fffbe6', text: '#d48806', border: '#ffe58f' },
-  error: { bg: '#fff2f0', text: '#ff4d4f', border: '#ffccc7' },
-  fatal: { bg: '#fff1f0', text: '#a8071a', border: '#ffa39e' },
-}
-
-const DEFAULT_LEVEL_STYLE: LevelStyle = { bg: '#f0f0f0', text: '#595959', border: '#d9d9d9' }
-
 function levelStyle(level: string): LevelStyle {
-  return LEVEL_COLORS[level.toLowerCase()] ?? DEFAULT_LEVEL_STYLE
+  return theme.severity[level.toLowerCase() as keyof typeof theme.severity] ?? theme.severity.trace
 }
 
 function relativeTime(timestamp: number): string {
@@ -41,17 +31,17 @@ const Row = styled.div`
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid ${theme.border.subtle};
   cursor: pointer;
   &:hover {
-    background: #fafafa;
+    border: 1px solid ${theme.bg.hover};
   }
 `
 
 const Timestamp = styled.span`
   flex-shrink: 0;
   font-size: 0.75rem;
-  color: #8c8c8c;
+  color: ${theme.text.secondary};
   font-family: monospace;
   min-width: 6rem;
 `
@@ -78,7 +68,7 @@ const Body = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: 0.875rem;
-  color: #262626;
+  color: ${theme.app.text};
   font-family: monospace;
 `
 

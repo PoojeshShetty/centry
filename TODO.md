@@ -1,0 +1,3 @@
+- separate out utilty functions in backend to dedicated utils folder
+- separate types to separate file if present in backend and frontend
+- change the sentry naming

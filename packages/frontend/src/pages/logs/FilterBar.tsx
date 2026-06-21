@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { useLogStore } from '../../store/useLogStore'
+import { theme } from '../../theme'
 
 const LEVELS = ['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'] as const
 type LevelOption = (typeof LEVELS)[number]
@@ -18,14 +19,12 @@ const Bar = styled.div`
   gap: 0.75rem;
   align-items: center;
   padding: 0.75rem 1rem;
-  background: #fafafa;
+  background: ${theme.app.surface};
   z-index: 1000;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid ${theme.app.border};
   flex-wrap: wrap;
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
 `
 
 const PillGroup = styled.div`
@@ -36,27 +35,27 @@ const PillGroup = styled.div`
 const Pill = styled.button<{ $active?: boolean }>`
   padding: 0.25rem 0.625rem;
   border-radius: 9999px;
-  border: 1px solid ${({ $active }) => ($active ? '#1677ff' : '#d9d9d9')};
-  background: ${({ $active }) => ($active ? '#e6f4ff' : 'transparent')};
-  color: ${({ $active }) => ($active ? '#1677ff' : '#595959')};
+  border: 1px solid ${({ $active }) => ($active ? theme.auth.accent : theme.app.border)};
+  background: ${({ $active }) => ($active ? theme.app.elevated : 'transparent')};
+  color: ${({ $active }) => ($active ? theme.auth.accent : theme.app.textSecondary)};
   font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
   &:hover {
-    border-color: #1677ff;
-    color: #1677ff;
+    border-color: ${theme.auth.accent};
+    color: ${theme.auth.accent};
   }
 `
 
 const SearchInput = styled.input`
   padding: 0.25rem 0.625rem;
-  border: 1px solid #d9d9d9;
+  border: 1px solid ${theme.app.border};
   border-radius: 6px;
   font-size: 0.875rem;
   min-width: 200px;
   &:focus {
     outline: none;
-    border-color: #1677ff;
+    border-color: ${theme.auth.accent};
   }
 `
 
@@ -69,13 +68,13 @@ const PresetGroup = styled.div`
 const PresetBtn = styled.button`
   padding: 0.25rem 0.625rem;
   border-radius: 6px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid ${theme.app.border};
   background: transparent;
   font-size: 0.75rem;
   cursor: pointer;
   &:hover {
-    border-color: #1677ff;
-    color: #1677ff;
+    border-color: ${theme.auth.accent};
+    color: ${theme.auth.accent};
   }
 `
 

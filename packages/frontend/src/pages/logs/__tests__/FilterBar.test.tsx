@@ -52,6 +52,14 @@ describe('FilterBar (FR-13)', () => {
     jest.useRealTimers()
   })
 
+  describe('layout', () => {
+    it('Bar has position sticky (not fixed)', () => {
+      const { container } = renderFilterBar()
+      const bar = container.firstChild as HTMLElement
+      expect(bar).toHaveStyle({ position: 'sticky' })
+    })
+  })
+
   describe('level pills', () => {
     it('renders all 7 level pills', () => {
       renderFilterBar()

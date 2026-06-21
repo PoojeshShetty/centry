@@ -1,10 +1,12 @@
 import { jest } from '@jest/globals'
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { Modal } from 'antd'
+import type { RouteObject } from 'react-router-dom'
 import { useAuthStore } from '../../../store/useAuthStore'
 import { useProjectStore } from '../../../store/useProjectStore'
 import { renderPage } from '../../../utils/testUtils'
 import { paths } from '../../../routes/routes'
+import ProjectsPage from '../index'
 
 const user = {
   id: '1',
@@ -102,6 +104,19 @@ describe('ProjectsPage', () => {
     await waitFor(() => expect(screen.getByLabelText(/name/i)).toBeInTheDocument())
     expect(screen.getByLabelText(/application url/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/environment/i)).toBeInTheDocument()
+  })
+
+  it('clicking a project card navigates to /projects/:id (FR-06)', async () => {
+    useProjectStore.setState({ projects: [mockProjects[0]], fetchProjects: jest.fn() as any })
+    const routes: RouteObject[] = [
+      { path: paths.projects, element: <ProjectsPage /> },
+      { path: '/projects/:projectId', element: <div data-testid="detail-page" /> },
+    ]
+    renderPage([paths.projects], routes)
+
+    await waitFor(() => expect(screen.getByText('Project Alpha')).toBeInTheDocument())
+    fireEvent.click(screen.getByText('Project Alpha'))
+    await waitFor(() => expect(screen.getByTestId('detail-page')).toBeInTheDocument())
   })
 
   it('does not call archiveProject when cancelled (FR-10)', async () => {

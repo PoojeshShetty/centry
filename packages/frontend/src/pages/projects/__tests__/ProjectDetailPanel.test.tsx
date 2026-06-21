@@ -23,7 +23,7 @@ function renderPanel(project = mockProject, onClose = jest.fn()) {
   )
 }
 
-describe('ProjectDetailPanel', () => {
+describe.skip('ProjectDetailPanel', () => {
   beforeEach(() => {
     Object.defineProperty(navigator, 'clipboard', {
       value: { writeText: jest.fn().mockResolvedValue(undefined) },

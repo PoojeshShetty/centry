@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { Button, Modal } from 'antd'
 import { useProjectStore } from '../../store/useProjectStore'
 import ProjectCard from './ProjectCard'
 import CreateProjectDrawer from './CreateProjectDrawer'
-import ProjectDetailPanel from './ProjectDetailPanel'
 import { theme } from '../../theme'
 
 const PageWrapper = styled.div`
   padding: 2rem;
+  background: ${theme.app.bg};
+  min-height: 100%;
 `
 
 const Header = styled.div`
@@ -27,12 +29,12 @@ const Grid = styled.div`
 const EmptyState = styled.div`
   text-align: center;
   padding: 4rem 2rem;
-  color: ${theme.text.secondary};
+  color: ${theme.app.textSecondary};
 `
 
 export default function ProjectsPage() {
-  const { projects, fetchProjects, archiveProject, selectedProject, selectProject } =
-    useProjectStore()
+  const { projects, fetchProjects, archiveProject } = useProjectStore()
+  const navigate = useNavigate()
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function ProjectsPage() {
             <ProjectCard
               key={p.id}
               project={p}
-              onSelect={selectProject}
+              onSelect={(p) => navigate('/projects/' + p.id)}
               onArchive={handleArchive}
             />
           ))}
@@ -79,7 +81,6 @@ export default function ProjectsPage() {
         onClose={() => setDrawerOpen(false)}
         onSuccess={() => { setDrawerOpen(false); fetchProjects() }}
       />
-      <ProjectDetailPanel project={selectedProject} onClose={() => selectProject(null)} />
     </PageWrapper>
   )
 }

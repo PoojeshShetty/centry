@@ -10,13 +10,13 @@ export interface ProjectCardProps {
 }
 
 const Card = styled.div`
-  border: 1px solid ${theme.border.default};
+  border: 1px solid ${theme.app.border};
   border-radius: 8px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background: ${theme.bg.surface};
+  background: ${theme.app.surface};
   cursor: pointer;
   transition: box-shadow 0.15s ease;
 
@@ -28,11 +28,12 @@ const Card = styled.div`
 const ProjectName = styled.h3`
   margin: 0;
   font-size: 1rem;
+  color: ${theme.app.text};
 `
 
 const ProjectUrl = styled.p`
   margin: 0;
-  color: ${theme.text.muted};
+  color: ${theme.app.textSecondary};
   font-size: 0.875rem;
   word-break: break-all;
 `
@@ -42,14 +43,14 @@ const EnvironmentBadge = styled.span`
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 0.75rem;
-  background-color: ${theme.bg.elevated};
-  color: ${theme.text.muted};
+  background-color: ${theme.app.elevated};
+  color: ${theme.app.textSecondary};
   align-self: flex-start;
 `
 
 const CreatedAt = styled.time`
   font-size: 0.75rem;
-  color: ${theme.text.secondary};
+  color: ${theme.app.textSecondary};
 `
 
 const Actions = styled.div`

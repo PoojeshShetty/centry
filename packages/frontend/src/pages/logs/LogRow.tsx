@@ -34,7 +34,7 @@ const Row = styled.div`
   border-bottom: 1px solid ${theme.border.subtle};
   cursor: pointer;
   &:hover {
-    background: ${theme.bg.hover};
+    border: 1px solid ${theme.bg.hover};
   }
 `
 
@@ -68,7 +68,7 @@ const Body = styled.span`
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: 0.875rem;
-  color: ${theme.text.primary};
+  color: ${theme.app.text};
   font-family: monospace;
 `
 

@@ -18,7 +18,7 @@ const SectionLabel = styled.p`
 `
 
 const BodyText = styled.pre`
-  background: ${theme.bg.elevated};
+  background: ${theme.app.elevated};
   border-radius: 6px;
   padding: 0.75rem;
   margin: 0;
@@ -70,7 +70,7 @@ export default function LogDetailDrawer({ log, onClose }: LogDetailDrawerProps) 
           {(log.trace_id || log.span_id) && (
             <Section>
               <SectionLabel>Trace</SectionLabel>
-              <Space direction="vertical" style={{ width: '100%' }}>
+              <Space orientation="vertical" style={{ width: '100%' }}>
                 {log.trace_id && (
                   <Typography.Text copyable={{ text: log.trace_id }} style={{ fontFamily: 'monospace', fontSize: '0.8125rem' }}>
                     trace: {log.trace_id}

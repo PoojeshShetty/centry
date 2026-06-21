@@ -137,6 +137,17 @@ describe('useProjectStore', () => {
       )
     })
 
+    it('updates projects array dsn when rotation succeeds (FR-06)', async () => {
+      useProjectStore.setState({ projects: [mockProjectWithDsn], selectedProject: null })
+      mockProjectApi.rotateKey.mockResolvedValue({ dsn: 'https://newkey@localhost:3000/proj-1' })
+
+      await useProjectStore.getState().rotateKey('proj-1')
+
+      expect(useProjectStore.getState().projects[0].dsn).toBe(
+        'https://newkey@localhost:3000/proj-1',
+      )
+    })
+
     it('sets error on API failure', async () => {
       useProjectStore.setState({ selectedProject: mockProjectWithDsn })
       mockProjectApi.rotateKey.mockRejectedValue(new Error('unauthorized'))

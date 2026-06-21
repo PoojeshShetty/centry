@@ -4,7 +4,7 @@ import LoginPage from '../pages/login'
 import RegisterPage from '../pages/register'
 import AccountPage from '../pages/account'
 import ProjectsPage from '../pages/projects'
-import LogsPage from '../pages/logs'
+import ProjectDetailPage from '../pages/projects/ProjectDetailPage'
 import NotFoundPage from '../pages/not-found'
 import ProtectedRoute from '../components/ProtectedRoute'
 import AppShell from '../components/AppShell'
@@ -18,7 +18,7 @@ export const paths = {
   register: '/register',
   account: '/account',
   projects: '/projects',
-  projectLogs: '/projects/:projectId/logs',
+  projectDetail: '/projects/:projectId',
 } as const
 
 /** Route table consumed by the browser router. */
@@ -34,7 +34,7 @@ export const appRoutes: RouteObject[] = [
     ),
     children: [
       { path: paths.projects, element: <ProjectsPage /> },
-      { path: paths.projectLogs, element: <LogsPage /> },
+      { path: paths.projectDetail, element: <ProjectDetailPage /> },
       { path: paths.account, element: <AccountPage /> },
     ],
   },

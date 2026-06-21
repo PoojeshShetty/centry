@@ -17,8 +17,13 @@ describe('routes', () => {
     expect(allPaths).toContain('*')
   })
 
-  it('declares /projects/:projectId/logs for the logs explorer (FR-12)', () => {
+  it('declares /projects/:projectId for the project detail page (FR-07)', () => {
     const allPaths = collectPaths(router.routes)
-    expect(allPaths).toContain('/projects/:projectId/logs')
+    expect(allPaths).toContain('/projects/:projectId')
+  })
+
+  it('does not declare /projects/:projectId/logs (FR-07)', () => {
+    const allPaths = collectPaths(router.routes)
+    expect(allPaths).not.toContain('/projects/:projectId/logs')
   })
 })

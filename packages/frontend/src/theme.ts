@@ -39,6 +39,14 @@ export const theme = {
     text: '#111827',
     textSecondary: '#6b7280',
   },
+  app: {
+    bg: '#ffffff',
+    surface: '#f5f7fa',
+    elevated: '#e5e7eb',
+    border: '#d1d5db',
+    text: '#111827',
+    textSecondary: '#6b7280',
+  },
 } as const;
 
 export type Theme = typeof theme;
